@@ -1,5 +1,4 @@
 import Product from "../../domain/entity/product";
-import product from "../../domain/entity/product";
 import ProductRepositoryInterface from "../../domain/repository/product.repository.interface";
 import ProductModel from "../db/sequelize/model/product.model";
 
@@ -31,7 +30,7 @@ export default class ProductRepository implements ProductRepositoryInterface {
         return new Product(productModel.id, productModel.name, productModel.price);
     }
 
-    async findAll(): Promise<product[]> {
+    async findAll(): Promise<Product[]> {
         const productModels = await ProductModel.findAll();
         return productModels.map((productModel) => 
             new Product(productModel.id, productModel.name, productModel.price)
