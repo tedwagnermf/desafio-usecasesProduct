@@ -4,6 +4,8 @@ import ProductModel from "../db/sequelize/model/product.model";
 import ProductRepository from "./product.repository";
 
 describe("Product repository tests", () => {
+    jest.setTimeout(60 * 1000);
+
     let sequelize: Sequelize;
 
     beforeEach(async () => {
