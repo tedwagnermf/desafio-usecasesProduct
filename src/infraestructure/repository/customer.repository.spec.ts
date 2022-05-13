@@ -6,6 +6,7 @@ import CustomerRepository from "./customer.repository";
 
 describe("Customer repository tests", () => {
     let sequelize: Sequelize;
+    jest.setTimeout(60 * 1000);
 
     beforeEach(async () => {
         sequelize = new Sequelize({
