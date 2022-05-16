@@ -1,4 +1,7 @@
+import { Sequelize } from "sequelize-typescript";
 import Product from "../../../domain/entity/product";
+import ProductModel from "../../../infraestructure/db/sequelize/model/product.model";
+import ProductRepository from "../../../infraestructure/repository/product.repository";
 import UpdateProductUseCase from "./update.product.usecase";
 
 const product = new Product(
@@ -13,18 +16,29 @@ const input = {
     price: 2,
 };
 
-const mockRepository = () => {
-    return {
-        create: jest.fn(),
-        update: jest.fn(),
-        find: jest.fn().mockReturnValue(Promise.resolve(product)),
-        findAll: jest.fn(),
-    };
-};
-
 describe("Unit test for product update use case", () => {
+    jest.setTimeout(60 * 1000);
+
+    let sequelize: Sequelize;
+
+    beforeEach(async () => {
+        sequelize = new Sequelize({
+            dialect: "sqlite",
+            storage: ":memory:",
+            logging: false,
+            sync: { force: true }
+        })
+
+        await sequelize.addModels([ProductModel]);
+        await sequelize.sync();
+    });
+
+    afterEach(async () => {
+        await sequelize.close();
+    });
+
     it("Should update a product", async () => {
-        const productRepository = mockRepository();
+        const productRepository = new ProductRepository();
         const productUpdateUseCase = new UpdateProductUseCase(productRepository);
 
         await productRepository.create(product);
